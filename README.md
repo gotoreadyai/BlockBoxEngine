@@ -30,7 +30,7 @@ export default {
 - Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
 # eduplatform-frontend-service
 
-#LIPSYNC  
+#LIPSYNC!  
 
 $$ https://www.reddit.com/r/threejs/comments/13un5ph/is_it_possible_to_sync_a_lip_and_facial/
 $$ https://github.com/webaverse-studios/CharacterCreator/blob/stable/src/library/lipsync.js# blockbox
