@@ -3,7 +3,6 @@ import {
   DefaultRenderingPipeline,
 
   MeshBuilder,
-  Scene,
   SolidParticle,
   SolidParticleSystem,
   StandardMaterial,

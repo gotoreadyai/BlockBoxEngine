@@ -1,7 +1,6 @@
 import {
   Color3,
   DirectionalLight,
-  HemisphericLight,
   LightGizmo,
   Scene,
   ShadowGenerator,

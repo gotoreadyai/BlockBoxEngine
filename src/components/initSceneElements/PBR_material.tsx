@@ -1,9 +1,7 @@
 import {
   Color3,
-  MaterialPluginBase,
   PBRMaterial,
   Scene,
-  StandardMaterial,
   Texture,
   Vector4,
 } from "@babylonjs/core";

@@ -1,0 +1,9 @@
+{
+  "chunks": [
+    "chunk_0_0_0"
+  ],
+  "chunksMap": "system_gfx/tiles.png",
+  "views": {
+    "home": {}
+  }
+}

@@ -1,8 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { bodyPartsSchema } from "../initSceneElements/character";
 
 const BoneControll = ({ handleState }: any) => {
-  const [controlls, setControl] = useState(bodyPartsSchema);
+  const [controlls, _setControl] = useState(bodyPartsSchema);
 
   return (
     <div className="flex flex-col gap-3 mt-2 px-3 text-xs">

@@ -2,6 +2,8 @@ import { useCallback, useEffect } from "react";
 import { useThemeStore } from "../ThemeStore";
 
 function HotKeys({ handleReact }: any) {
+  console.log(handleReact);
+  
   const escFunction = useCallback((event: KeyboardEvent) => {
     if (event.key === "Tab") {
       useThemeStore.setState(() => ({

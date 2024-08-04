@@ -117,26 +117,26 @@ const KeyframeEditor: React.FC<KeyframeEditorProps> = ({
     setKeyframes(newKeyframes);
   };
 
-  const updateKeyframeValue = (
-    frame: number,
-    value: { x: number; y: number; z: number }
-  ) => {
-    const updatedKeyframes = keyframes.map((kf) =>
-      kf.frame === frame ? { ...kf, value } : kf
-    );
-    setKeyframes(updatedKeyframes);
-  };
+  // const updateKeyframeValue = (
+  //   frame: number,
+  //   value: { x: number; y: number; z: number }
+  // ) => {
+  //   const updatedKeyframes = keyframes.map((kf) =>
+  //     kf.frame === frame ? { ...kf, value } : kf
+  //   );
+  //   setKeyframes(updatedKeyframes);
+  // };
 
-  const getCurrentKeyframe = () => {
-    return (
-      keyframes.find((kf) => kf.frame === currentFrame) || {
-        frame: currentFrame,
-        value: { x: 0, y: 0, z: 0 },
-      }
-    );
-  };
+  // const getCurrentKeyframe = () => {
+  //   return (
+  //     keyframes.find((kf) => kf.frame === currentFrame) || {
+  //       frame: currentFrame,
+  //       value: { x: 0, y: 0, z: 0 },
+  //     }
+  //   );
+  // };
 
-  const currentKeyframe = getCurrentKeyframe();
+ // const currentKeyframe = getCurrentKeyframe();
 
   return (
     <div className="flex-1 flex">
