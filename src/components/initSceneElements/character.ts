@@ -203,7 +203,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "root",
     offsetMatrix: Matrix.Translation(0, 0, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "belly",
@@ -211,7 +211,7 @@ export const bodyParts = [
     position: [0, 0.15, 0],
     parentBone: "center",
     offsetMatrix: Matrix.Translation(0, 0.4, 0),
-    uv: 2,
+    uv: 3,
   },
   {
     name: "chest",
@@ -227,7 +227,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "chest",
     offsetMatrix: Matrix.Translation(0, 0.2, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "neckTop",
@@ -235,14 +235,14 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "neckBottom",
     offsetMatrix: Matrix.Translation(0, 0.2, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "head",
     size: [0.8, 0.8, 0.8],
     position: [0, 0.2, 0],
     parentBone: "neckTop",
-    offsetMatrix: Matrix.Translation(0, 0, 0.38),
+    offsetMatrix: Matrix.Translation(0, 0, 0.355),
     uv: 0,
   },
 
@@ -252,7 +252,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "head",
     offsetMatrix: Matrix.Translation(0, 0.1, 0),
-    uv: 0,
+    uv: 5,
   },
   /* rightArm */
   {
@@ -261,7 +261,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "belly",
     offsetMatrix: Matrix.Translation(0.35, 0.1, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "rightShoulderPin2",
@@ -269,7 +269,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "rightShoulderPin1",
     offsetMatrix: Matrix.Translation(0, 0, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "rightShoulderPin3",
@@ -277,7 +277,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "rightShoulderPin2",
     offsetMatrix: Matrix.Translation(0, 0, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "rightShoulder",
@@ -285,7 +285,7 @@ export const bodyParts = [
     position: [0.1, 0.1, 0],
     parentBone: "rightShoulderPin3",
     offsetMatrix: Matrix.Translation(0.3, 0.1, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "rightArm",
@@ -293,7 +293,7 @@ export const bodyParts = [
     position: [0, 0, 0],
     parentBone: "rightShoulder",
     offsetMatrix: Matrix.Translation(0.15, 0, 0),
-    uv: 2,
+    uv: 1,
   },
   {
     name: "rightForeArm",
@@ -301,7 +301,7 @@ export const bodyParts = [
     position: [0.15, 0, 0],
     parentBone: "rightArm",
     offsetMatrix: Matrix.Translation(0, 0, 0),
-    uv: 2,
+    uv: 1,
   },
 
   /* leftArm */
@@ -568,20 +568,67 @@ export const runAnimation = (character: any, scene: Scene): void => {
   });
   keys.push({
     frame: 30,
-    value: Quaternion.RotationAxis(Axis.Y, Math.PI / 9),
+    value: Quaternion.RotationAxis(Axis.Y, 0.1),
   });
   keys.push({
-    frame: 31,
-    value: Quaternion.RotationAxis(Axis.Z, Math.PI / 9),
+    frame: 36,
+    value: Quaternion.RotationAxis(Axis.Z, 0.1),
   });
   keys.push({
     frame: 60,
     value: character.skeleton.bones[2].rotationQuaternion.clone(),
   });
 
+
   backBoneAnimation.setKeys(keys);
   character.skeleton.bones[2].animations.push(backBoneAnimation);
 
   //Rozpoczęcie animacji
   scene.beginAnimation(character.skeleton.bones[2], 0, 60, true);
+
+
+
+  // Animacja UV
+  const uvAnimation = new Animation(
+    "uvAnimation",
+    "diffuseTexture.uOffset", // Zmiana na 'uOffset' lub 'vOffset' w zależności od osi, którą chcesz animować
+    30,
+    Animation.ANIMATIONTYPE_FLOAT,
+    Animation.ANIMATIONLOOPMODE_CYCLE
+  );
+
+  const uvKeys = [];
+  uvKeys.push({
+    frame: 0,
+    value: 0,
+  });
+  uvKeys.push({
+    frame: 30,
+    value: 3.4,
+  });
+  uvKeys.push({
+    frame: 60,
+    value: 0,
+  });
+
+  uvAnimation.setKeys(uvKeys);
+ // Assuming the character has a material with a diffuseTexture
+  // if ( character.meshes.mouth.material.albedoTexture) {
+  //   character.meshes.mouth.material.albedoTexture.animations = [uvAnimation];
+  // }
+  // if (character.meshes.mouth.material.albedoTexture) {
+  //   scene.beginAnimation(character.meshes.mouth.material.albedoTexture, 0, 60, true);
+  // }
+
+   if (character.meshes.mouth.faceUV) {
+    
+    character.meshes.mouth.material.albedoTexture.uOffset = 1.2 
+    //character.meshes.mouth.material.xOffsret=1
+  }
+ 
+  
+ console.log(character.meshes.mouth.material);
+ 
 };
+
+

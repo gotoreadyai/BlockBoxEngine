@@ -1,5 +1,5 @@
 import { useRef } from "react";
-import { stateType,  useThemeStore } from "../ThemeStore";
+import { stateType, useThemeStore } from "../ThemeStore";
 import HotKeys from "./HotKeys";
 import SceneComponent from "./SceneComponent";
 import { setupMainCamera } from "./initSceneElements/camera";
@@ -9,17 +9,7 @@ import {
   setupShadows,
 } from "./initSceneElements/lights";
 // import HavokPhysics from "@babylonjs/havok";
-import {
-  Camera,
-  Light,
-  Mesh,
-  MeshBuilder,
-  Scene,
-  ShadowGenerator,
-  StandardMaterial,
-  Texture,
-  Vector3,
-} from "@babylonjs/core";
+import { Camera, Light, Mesh, Scene, ShadowGenerator } from "@babylonjs/core";
 import InitComponent from "./LayoutComponent";
 
 import {
@@ -39,7 +29,15 @@ import {
   setupCharacter,
 } from "./initSceneElements/character";
 
+import { compress, decompress } from "compress-json";
+
+const dataInit = () => {
+  console.log(window.btoa(JSON.stringify(compress([]))));
+};
+
 function SceneMainWorkspace() {
+  dataInit();
+
   // const sceneRef = useRef<Scene | null>(null);
   let shadowGenerator: ShadowGenerator;
   let mainLight: Light;
@@ -71,7 +69,7 @@ function SceneMainWorkspace() {
     targeter = setupTargeter(scene);
 
     const { voxelMesh, chunkHelper }: { voxelMesh: Mesh; chunkHelper: Mesh } =
-    setupChunk([0, 0, 0], voxels, shadowGenerator, scene);
+      setupChunk([0, 0, 0], voxels, shadowGenerator, scene);
     chunkHelper1 = chunkHelper;
     setupVoxelsObservers(scene, voxels, voxelMesh, targeter);
 
@@ -80,49 +78,28 @@ function SceneMainWorkspace() {
     // setupChunk([0, 0, -1], voxels, shadowGenerator, scene);
     // setupChunk([0, 0, 1], voxels, shadowGenerator, scene);
 
-    // setupChunk([1, 0, 1], voxels, shadowGenerator, scene);
-    // setupChunk([1, 0, -1], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, -1], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, 1], voxels, shadowGenerator, scene);
-
-    // setupChunk([0, 0, -2], voxels, shadowGenerator, scene);
-    // setupChunk([-2, 0, 0], voxels, shadowGenerator, scene);
-    // setupChunk([0, 0, 2], voxels, shadowGenerator, scene);
-    // setupChunk([2, 0, 0], voxels, shadowGenerator, scene);
-
-    // setupChunk([1, 0, 0], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, 0], voxels, shadowGenerator, scene);
-    // setupChunk([0, 0, -1], voxels, shadowGenerator, scene);
-    // setupChunk([0, 0, 1], voxels, shadowGenerator, scene);
-
-    // setupChunk([1, 0, 1], voxels, shadowGenerator, scene);
-    // setupChunk([1, 0, -1], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, -1], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, 1], voxels, shadowGenerator, scene);
-
-    // setupChunk([0, 0, -2], voxels, shadowGenerator, scene);
-    // setupChunk([-2, 0, 0], voxels, shadowGenerator, scene);
-    // setupChunk([0, 0, 2], voxels, shadowGenerator, scene);
-    // setupChunk([2, 0, 0], voxels, shadowGenerator, scene);
-
-    // setupChunk([2, 0, 1], voxels, shadowGenerator, scene);
-    // setupChunk([-2, 0, 1], voxels, shadowGenerator, scene);
-    // setupChunk([-2, 0, -1], voxels, shadowGenerator, scene);
-    // setupChunk([2, 0, -1], voxels, shadowGenerator, scene);
-
-    // setupChunk([1, 0, 2], voxels, shadowGenerator, scene);
-    // setupChunk([1, 0, -2], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, 2], voxels, shadowGenerator, scene);
-    // setupChunk([-1, 0, -2], voxels, shadowGenerator, scene);
-
-    character = setupCharacter(scene,shadowGenerator);
-    character.skeleton.bones[0].setPosition(new Vector3(0, 1, 0));
-    //runAnimation(character,scene)
+    // character = setupCharacter(scene, shadowGenerator);
+    // character.skeleton.bones[0].setPosition(new Vector3(0, 1, 0));
+    // runAnimation(character, scene);
 
     /* ENVIROMENT */
     // serupDOF(scene, camera);
     setupSpsEnvironment(scene);
     // serupFog(scene);
+
+    // Add the highlight layer.
+    // var hl1 = new HighlightLayer("hl1", scene);
+    // hl1.addMesh(voxelMesh, Color3.Red());
+    // hl1.blurHorizontalSize=.2;
+    // hl1.blurVerticalSize=.2;
+
+    // const glow = new GlowLayer("glow", scene, {
+    //   blurKernelSize: 8,
+    // });
+    // glow.intensity = 1.4;
+    // glow.referenceMeshToUseItsOwnMaterial(voxelMesh);
+    // glow.disableBoundingBoxesFromEffectLayer = false;
+    // glow.renderingGroupId = 'chunkHelper'
 
     /* Optimaze */
     // scene.freezeActiveMeshes();
@@ -144,7 +121,9 @@ function SceneMainWorkspace() {
   /* init voxels */
   localStorage.setItem("VOXELS", JSON.stringify(voxels));
 
-  const onRender = async (scene: Scene) => {};
+  const onRender = async (scene: Scene) => {
+    // character.meshes.mouth.material.albedoTexture.uOffset = 0.1;
+  };
 
   return (
     <>
