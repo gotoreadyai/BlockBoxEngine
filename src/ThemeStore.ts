@@ -6,6 +6,8 @@ export type ThemeStore = {
   blocks: [number, number, number][];
   fps: string;
   selectedBlock: number;
+  scenario:any;
+  project:string
 };
 
 export const useThemeStore = create<ThemeStore>(() => ({
@@ -22,4 +24,6 @@ export const useThemeStore = create<ThemeStore>(() => ({
     [0, 1, 1],
   ],
   selectedBlock: 0,
+  scenario:{},
+  project:'editor'
 }));

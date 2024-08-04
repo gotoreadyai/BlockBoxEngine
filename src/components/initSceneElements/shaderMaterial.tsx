@@ -10,9 +10,8 @@ import {
   DirectionalLight,
   ShadowGenerator,
   Mesh,
-
 } from "@babylonjs/core";
-
+import { useThemeStore } from "../../ThemeStore";
 
 export const setupMaterial = (scene: Scene) => {
   Effect.ShadersStore["customVertexShader"] = `
@@ -166,7 +165,7 @@ void main() {
   );
 
   const texture = new Texture(
-    "/tiles.png",
+    `/scenarios/${useThemeStore.getState().project}/tiles.png`,
     scene,
     true,
     false,

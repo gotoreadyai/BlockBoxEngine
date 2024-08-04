@@ -27,14 +27,10 @@ import {
 
 } from "./initSceneElements/character";
 
-import { compress } from "compress-json";
 
-const dataInit = () => {
-  console.log(window.btoa(JSON.stringify(compress([]))));
-};
 
 function SceneMainWorkspace() {
-  dataInit();
+
 
   // const sceneRef = useRef<Scene | null>(null);
   let shadowGenerator: ShadowGenerator;
@@ -45,7 +41,7 @@ function SceneMainWorkspace() {
     /*
        x, y, z, u, v, r, g, b, alphaOffset
     */
-    localStorage.getItem("VOXELS") ||
+    localStorage.getItem("chunk_0_0_0") ||
       `[
       [0, 0, 0, 0, 1, 1, 1, 0, 0],
       [1, 0, 0, 1, 1, 1, 1, 0, 0]
@@ -123,11 +119,11 @@ function SceneMainWorkspace() {
   /* init voxels */
   localStorage.setItem("VOXELS", JSON.stringify(voxels));
 
-  const onRender = async (scene: Scene) => {
-    // character.meshes.mouth.material.albedoTexture.uOffset = 0.1;
-    console.log(scene);
+  // const onRender = async (scene: Scene) => {
+  //   // character.meshes.mouth.material.albedoTexture.uOffset = 0.1;
+  //   console.log(scene);
     
-  };
+  // };
 
   return (
     <>
@@ -135,7 +131,7 @@ function SceneMainWorkspace() {
         {" "}
         <SceneComponent
           antialias
-          onRender={onRender}
+          //onRender={onRender}
           onSceneReady={onSceneReady}
           engineOptions={{ preserveDrawingBuffer: true }}
           adaptToDeviceRatio
