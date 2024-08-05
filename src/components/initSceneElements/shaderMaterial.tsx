@@ -11,7 +11,7 @@ import {
   ShadowGenerator,
   Mesh,
 } from "@babylonjs/core";
-import { useThemeStore } from "../../ThemeStore";
+import { getProjectName } from "../../App";
 
 export const setupMaterial = (scene: Scene) => {
   Effect.ShadersStore["customVertexShader"] = `
@@ -22,7 +22,7 @@ export const setupMaterial = (scene: Scene) => {
     attribute vec3 normal;
     attribute vec2 uv;
     attribute vec2 uv2;
-   attribute vec4 color2;
+    attribute vec4 color2;
 
     uniform mat4 viewProjection;
     uniform mat4 worldViewProjection;
@@ -55,11 +55,7 @@ export const setupMaterial = (scene: Scene) => {
     vUV = uv + uv2;
     bufferColor = color2;  // Pass color2 to fragment shader
 
-   
-
-    
     gl_Position = viewProjection * worldPosition;
-
     }
   `;
 
@@ -79,63 +75,51 @@ export const setupMaterial = (scene: Scene) => {
   varying vec3 vLightVectorW;
   varying vec4 vShadowCoord;
 
-float unpackDepth(const in vec4 rgbaDepth) {
-    const vec4 bitShift = vec4(0.75, 0.1 / 255.0, 0.1 / (255.0 * 255.0), 0.1 / (255.0 * 255.0 * 255.0));
-    float depth = dot(rgbaDepth, bitShift);
-    return depth;
-}
+  float unpackDepth(const in vec4 rgbaDepth) {
+      const vec4 bitShift = vec4(0.75, 0.1 / 255.0, 0.1 / (255.0 * 255.0), 0.1 / (255.0 * 255.0 * 255.0));
+      float depth = dot(rgbaDepth, bitShift);
+      return depth;
+  }
 
-void main() {
-  
-    vec3 shadowCoord = vShadowCoord.xyz / vShadowCoord.w;
-    shadowCoord = vNormalW * vPositionW * shadowCoord *  0.5 + 0.25;
-   
-    float shadow = 0.75;
+  void main() {
+      vec3 shadowCoord = vShadowCoord.xyz / vShadowCoord.w;
+      shadowCoord = vNormalW * vPositionW * shadowCoord *  0.5 + 0.25;
     
-    if (shadowCoord.z < 1.0) {
-        float shadowDepth = unpackDepth(texture2D(shadowSampler, shadowCoord.xy));
-        shadow = shadowDepth < shadowCoord.z ? 0.7 : 1.0;
-    }
+      float shadow = 0.75;
+      if (shadowCoord.z < 1.0) {
+          float shadowDepth = unpackDepth(texture2D(shadowSampler, shadowCoord.xy));
+          shadow = shadowDepth < shadowCoord.z ? 0.7 : 1.0;
+      }
 
-    // Light
-    float ndl = max(0.0, dot(vNormalW, vLightVectorW));
-    vec3 textureColor = texture2D(textureSampler, vUV).rgb;
-    
-    
-    // Cartoon effect
-    if (ndl > TT[0]) { textureColor *= TBL[0]; }
-    else if (ndl > TT[1]) { textureColor *= TBL[1]; }
-    else if (ndl > TT[2]) { textureColor *= TBL[2]; }
-    else if (ndl > TT[3]) { textureColor *= TBL[3]; }
-    else { textureColor *= TBL[4]; }
+      // Light
+      float ndl = max(0.0, dot(vNormalW, vLightVectorW));
+      vec3 textureColor = texture2D(textureSampler, vUV).rgb;
+      
+      // Cartoon effect
+      if (ndl > TT[0]) { textureColor *= TBL[0]; }
+      else if (ndl > TT[1]) { textureColor *= TBL[1]; }
+      else if (ndl > TT[2]) { textureColor *= TBL[2]; }
+      else if (ndl > TT[3]) { textureColor *= TBL[3]; }
+      else { textureColor *= TBL[4]; }
 
+      vec3 burn = vec3(1,1,1);
+      if (textureColor.r < 0.6) {
+        burn *= vec3(bufferColor.g * 1.25, bufferColor.g * 1.25, bufferColor.b * 1.25);
+      } else{
+        burn = vec3(0.8,0.8,0.8);
+        shadow *= 1.25;
+      }
+      
+      // textureColor *= lightIntensity * shadow * vPositionW;
+      textureColor *= shadow *  0.9;  
 
-    vec3 burn = vec3(1,1,1);
-
-    if (textureColor.r < 0.6) {
-      burn *= vec3(bufferColor.g * 1.25, bufferColor.g * 1.25, bufferColor.b * 1.25);
-    } else{
-      burn = vec3(0.8,0.8,0.8);
-      shadow *= 1.25;
-    }
-    
-    // textureColor *= lightIntensity * shadow * vPositionW;
-    textureColor *= shadow *  0.9;  
-
-    float blurRadius = 0.01;
-    float texOffset = 0.5;
-    for (float x = -blurRadius; x <= blurRadius; x++) {
-        textureColor += texture2D(textureSampler, vUV + vec2(x, 0) * texOffset).rgb * vec3(0.25,0.25,0.25);
-    }
-
-   
-    
-    gl_FragColor = vec4( textureColor * burn , 1) * bufferColor; 
-
-
-}
-
-  
+      float blurRadius = 0.01;
+      float texOffset = 0.5;
+      for (float x = -blurRadius; x <= blurRadius; x++) {
+          textureColor += texture2D(textureSampler, vUV + vec2(x, 0) * texOffset).rgb * vec3(0.25,0.25,0.25);
+      }
+      gl_FragColor = vec4( textureColor * burn , 1) * bufferColor; 
+  }
   `;
 
   const material = new ShaderMaterial(
@@ -164,8 +148,10 @@ void main() {
     }
   );
 
+  const project = getProjectName();
+  console.log("project", project);
   const texture = new Texture(
-    `/scenarios/${useThemeStore.getState().project}/tiles.png`,
+    `${import.meta.env.VITE_ASSETS_ENDPOINT}/scenarios/${project}/tiles.png`,
     scene,
     true,
     false,
