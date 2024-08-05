@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import SceneMainWorkspace from "./components/SceneMainWorkspace";
-import { compress, decompress } from "compress-json";
+import { decompress } from "compress-json";
 import { useThemeStore } from "./ThemeStore";
 
 // const dataCompress = () => {

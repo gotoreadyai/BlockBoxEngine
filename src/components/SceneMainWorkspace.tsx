@@ -1,5 +1,4 @@
-
-import { stateType} from "../ThemeStore";
+import { stateType } from "../ThemeStore";
 import HotKeys from "./HotKeys";
 import SceneComponent from "./SceneComponent";
 import { setupMainCamera } from "./initSceneElements/camera";
@@ -9,7 +8,14 @@ import {
   setupShadows,
 } from "./initSceneElements/lights";
 // import HavokPhysics from "@babylonjs/havok";
-import { ArcRotateCamera,Light, Mesh, Scene, ShadowGenerator } from "@babylonjs/core";
+import {
+  Animation,
+  ArcRotateCamera,
+  Light,
+  Mesh,
+  Scene,
+  ShadowGenerator,
+} from "@babylonjs/core";
 import InitComponent from "./LayoutComponent";
 
 import {
@@ -17,21 +23,11 @@ import {
   setupVoxelsObservers,
   // setupVoxelsObservers,
 } from "./initSceneElements/voxels";
-import {
-
-  setupSpsEnvironment,
-} from "./initSceneElements/spsEnviroment";
+import { setupSpsEnvironment } from "./initSceneElements/spsEnviroment";
 import { setupTargeter } from "./initSceneElements/targeter";
-import {
-  handleAxisChange,
-
-} from "./initSceneElements/character";
-
-
+import { handleAxisChange } from "./initSceneElements/character";
 
 function SceneMainWorkspace() {
-
-
   // const sceneRef = useRef<Scene | null>(null);
   let shadowGenerator: ShadowGenerator;
   let mainLight: Light;
@@ -56,7 +52,7 @@ function SceneMainWorkspace() {
     // sceneRef.current = scene;
     camera = setupMainCamera(scene);
     console.log(camera);
-    
+
     mainLight = setupMainLight(scene);
     setupBackupLight(scene);
     shadowGenerator = setupShadows(mainLight);
@@ -68,7 +64,7 @@ function SceneMainWorkspace() {
       setupChunk([0, 0, 0], voxels, shadowGenerator, scene);
     chunkHelper1 = chunkHelper;
     console.log(chunkHelper1);
-    
+
     setupVoxelsObservers(scene, voxels, voxelMesh, targeter);
 
     // setupChunk([1, 0, 0], voxels, shadowGenerator, scene);
@@ -104,6 +100,44 @@ function SceneMainWorkspace() {
     scene.autoClearDepthAndStencil = false;
     scene.blockMaterialDirtyMechanism = true;
     scene.blockfreeActiveMeshesAndRenderingGroups = true;
+
+   // Tworzenie animacji alpha
+let animateAlpha = new Animation(
+  "animAlpha",
+  "alpha",
+  60,
+  Animation.ANIMATIONTYPE_FLOAT,
+  Animation.ANIMATIONLOOPMODE_CONSTANT
+);
+
+let keyframeAlpha = [];
+keyframeAlpha.push({ frame: 0, value: camera.alpha });
+keyframeAlpha.push({ frame: 50, value: 3.14 }); // Zmieniamy alpha na wartość liczbową
+
+animateAlpha.setKeys(keyframeAlpha);
+
+// Tworzenie animacji beta
+let animateBeta = new Animation(
+  "animBeta",
+  "beta",
+  60,
+  Animation.ANIMATIONTYPE_FLOAT,
+  Animation.ANIMATIONLOOPMODE_CONSTANT
+);
+
+let keyframeBeta = [];
+keyframeBeta.push({ frame: 0, value: camera.beta });
+keyframeBeta.push({ frame: 200, value: 3.14 }); // Zmieniamy beta na wartość liczbową
+
+animateBeta.setKeys(keyframeBeta);
+
+// Dodawanie animacji do kamery
+camera.animations = [];
+camera.animations.push(animateAlpha);
+camera.animations.push(animateBeta);
+
+// Uruchamianie animacji
+scene.beginAnimation(camera, 0, 200 , false);
   };
 
   const handleState = (state: stateType) => {
@@ -116,11 +150,10 @@ function SceneMainWorkspace() {
     }
   };
 
-
   // const onRender = async (scene: Scene) => {
   //   // character.meshes.mouth.material.albedoTexture.uOffset = 0.1;
   //   console.log(scene);
-    
+
   // };
 
   return (

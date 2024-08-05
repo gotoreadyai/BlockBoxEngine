@@ -1,9 +1,31 @@
 {
   "chunks": [
-    "chunk_0_0_0"
+    "0_chunk_0_0_0"
   ],
   "chunksMap": "system_gfx/tiles.png",
   "views": {
-    "home": {}
+    "start": {
+      "camera": {
+        "type": "ArcRotateCamera",
+        "radius": "10",
+        "target": [
+          0,
+          0,
+          0
+        ]
+      },
+      "popup": {
+        "menu": [
+          {
+            "label": "dupa",
+            "route": "voxel-editor"
+          },
+          {
+            "label": "zbita",
+            "route": "voxel-preview"
+          }
+        ]
+      }
+    }
   }
 }
