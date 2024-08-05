@@ -41,7 +41,7 @@ function SceneMainWorkspace() {
     /*
        x, y, z, u, v, r, g, b, alphaOffset
     */
-    localStorage.getItem("chunk_0_0_0") ||
+    localStorage.getItem("0_chunk_0_0_0") ||
       `[
       [0, 0, 0, 0, 1, 1, 1, 0, 0],
       [1, 0, 0, 1, 1, 1, 1, 0, 0]
@@ -116,8 +116,6 @@ function SceneMainWorkspace() {
     }
   };
 
-  /* init voxels */
-  localStorage.setItem("VOXELS", JSON.stringify(voxels));
 
   // const onRender = async (scene: Scene) => {
   //   // character.meshes.mouth.material.albedoTexture.uOffset = 0.1;

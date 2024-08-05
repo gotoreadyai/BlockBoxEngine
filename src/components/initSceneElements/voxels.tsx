@@ -136,13 +136,13 @@ export const createVoxel = (
 ) => {
   voxels.push([...position, uv, ...color]);
   setThinInstanceVortexBuffer(voxels, voxelMesh);
-  localStorage.setItem("chunk_0_0_0", JSON.stringify(voxels));
+  localStorage.setItem("0_chunk_0_0_0", JSON.stringify(voxels));
 };
 
 export const removeVoxel = (index: number, voxels: any, voxelMesh: Mesh) => {
   voxels.splice(index, 1);
   setThinInstanceVortexBuffer(voxels, voxelMesh);
-  localStorage.setItem("chunk_0_0_0", JSON.stringify(voxels));
+  localStorage.setItem("0_chunk_0_0_0", JSON.stringify(voxels));
 };
 
 export const setupVoxelsObservers = (

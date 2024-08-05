@@ -8,6 +8,7 @@ function LayoutComponent({ children, handleReact }: any) {
   const route = useThemeStore((state) => state.route);
   const fps = useThemeStore((state) => state.fps);
   const blocks = useThemeStore((state) => state.blocks);
+  const scenario = useThemeStore((state) => state.scenario);
 
   const initialKeyframes = [
     { frame: 0, value: { x: 0, y: 1, z: 0 } },
@@ -15,12 +16,24 @@ function LayoutComponent({ children, handleReact }: any) {
     { frame: 40, value: { x: 0, y: 1, z: 1 } },
   ];
 
+  const menu = (menu: any[]) => {
+    return menu.map((item) => (
+      <div
+        className="bg-zinc-800 hover:bg-zinc-950 p-4 w-72 cursor-pointer"
+        onClick={() =>
+          useThemeStore.setState(() => ({
+            route: item.route,
+          }))
+        }
+      >
+        {item.label}
+      </div>
+    ));
+  };
+
   return (
     <>
-      <div
-       
-        className="flex flex-col w-screen h-screen fixed select-none bg-zinc-700 font-pixel"
-      >
+      <div className="flex flex-col w-screen h-screen fixed select-none bg-zinc-700 font-pixel">
         <div className="flex gap-px p-px text-gray-200 text-base bg-zinc-800">
           <div className="py-1.5 px-3 w-80  font-black ">BLOCK BOX V0.0.1</div>
           <div className="flex items-center">
@@ -29,12 +42,13 @@ function LayoutComponent({ children, handleReact }: any) {
           <div className="flex-1"></div>
         </div>
         <div className="flex flex-1 text-base mt-px">
-          {route === "start" && (
+          {scenario && scenario.views?.[route]?.popup && (
             <div className="select-none fixed top-0 w-screen h-[calc(100vh-3rem)] flex flex-col items-center justify-center text-gray-200 gap-px text-xl">
-              <div className="bg-zinc-800 p-4 w-72">WORLD</div>
-              <div className="bg-zinc-800 p-4 w-72">CHARACTER</div>
+              {scenario.views?.[route]?.popup?.menu &&
+                menu(scenario.views?.[route]?.popup?.menu)}
             </div>
           )}
+
           <div className="w-80 flex flex-col text-gray-200 gap-px text-sm">
             {route === "voxel-preview" && (
               <>
